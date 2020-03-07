@@ -29,8 +29,23 @@
     function drawWorld() {
 
         // TODO: Draw the content of the scene.
-        rotatingRect();  // (DELETE THIS EXAMPLE)
+        //rotatingRect();  // (DELETE THIS EXAMPLE)
+       //drawWheel();
+       //drawRotatingBar();
+       graphics.save();
+       graphics.transform(.9,0,0,.9,.5,-.5);
+       drawWholeObject("blue");
+       graphics.restore();
 
+       graphics.save();
+       graphics.transform(.7,0,0,.7,-2.3,1.5);
+       drawWholeObject("purple");
+       graphics.restore();
+
+       graphics.save();
+       graphics.transform(.5,0,0,.5,2,2.15);
+       drawWholeObject("green");
+       graphics.restore();
     }
     
     /**
@@ -112,6 +127,71 @@
         drawWorld();
         graphics.restore();
     }
+
+    /*
+    * In the below function we draw a wheel  calling the circle and the line
+    */
+    function drawWheel(){
+       graphics.save(); // we save and restore to conserve the transformation and colors of the world
+       graphics.rotate( (frameNumber*0.75) * Math.PI/180 ); // here we perform the rotation
+       graphics.scale(1.25,1.25);
+       circle();
+       // To maximize our laziness as Computer scientist we don't draw the lines individually but we use a for loop this line are at a 30 degree angle.
+
+       for(let i = 0; i < 6; i++){
+          graphics.rotate(Math.PI/6);
+          line();
+       }
+       graphics.restore();
+    }
+
+
+    /*
+     * we now draw the rotating bar with the rotating wheels on it's end points
+     * using the painters algorithm we first draw the circles and then the bar
+     */
+    function drawRotatingBar() {
+       graphics.save();
+       graphics.rotate( (frameNumber*0.75) * Math.PI/180 );
+
+       graphics.save();
+       graphics.transform(1,0,0,1,1.3,0); // taking our reference point to the right end of the bar then drawing the wheel here
+       drawWheel();
+       graphics.restore();
+
+       graphics.save();
+       graphics.transform(1,0,0,1,-1.3,0); // taking our reference point to the left end of the bar then drawing another wheel
+       drawWheel();
+       graphics.restore();
+
+       graphics.save();
+       graphics.transform(2.8,0,0,.25,0,0); // taking our reference point back to the centre of the  but translating the bar by the factor of (3,0.25)
+       graphics.fillStyle = "red";
+       filledRect();
+
+       graphics.restore();
+       graphics.restore();
+
+    }
+
+
+    /*
+     * We now draw the whole object putting together what we have so far
+     */
+
+    function drawWholeObject(fillc){
+       graphics.save();
+       drawRotatingBar();
+       graphics.fillStyle = fillc;
+       graphics.transform(.75,0,0,2.5,0,-2.5);
+       filledTriangle(graphics);
+
+
+       graphics.restore();
+
+    }
+
+
     
     /**
      * Applies a coordinate transformation to the graphics context, to map
